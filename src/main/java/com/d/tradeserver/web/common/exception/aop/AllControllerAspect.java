@@ -1,4 +1,4 @@
-package com.d.tradeserver.web.common.aop;
+package com.d.tradeserver.web.common.exception.aop;
 
 import com.d.tradeserver.common.utils.MyPairUtils;
 import org.aspectj.lang.annotation.After;

@@ -1,2 +1,13 @@
-package com.d.tradeserver.web.common.annotation;public @interface RequestParamObject {
+package com.d.tradeserver.web.common.annotation;
+
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface RequestParamObject {
+
 }

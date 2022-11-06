@@ -1,4 +1,4 @@
-package com.d.tradeserver.common.pool;
+package com.d.tradeserver.common.objectpool;
 
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
@@ -21,6 +21,7 @@ public class AbstractPool<A> implements Pool<A> {
 
     /**
      * 从对象池取出对象
+     *
      * @return 返回从对象池取出对象
      */
     @Override
@@ -34,6 +35,7 @@ public class AbstractPool<A> implements Pool<A> {
 
     /**
      * 将对象放回对象池
+     *
      * @param a 要放回的对象
      */
     @Override

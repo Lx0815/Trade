@@ -1,4 +1,4 @@
-package com.d.tradeserver.web.common.requestParameterResolver;
+package com.d.tradeserver.web.common.annotation.annotationHandler;
 
 import com.d.tradeserver.web.common.annotation.MultiRequestBody;
 import com.fasterxml.jackson.core.JsonParser;
@@ -104,12 +104,8 @@ public class MultiParameterBodyResolver implements HandlerMethodArgumentResolver
         // 参数非基本数据类型，如果不允许解析外层属性，且为必传参数报错抛出异常
         Assert.isTrue(!(!multiRequestBody.parseAllFields() && multiRequestBody.required()), String.format("required param %s is not present", key));
 
-        try {
-            // 既然找不到对应参数，而且非基本类型，我们可以解析外层属性，将整个 JSON 作为参数进行解析。解析失败会抛出异常
-            result = objectMapper.readValue(requestBody, parameterType);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        // 既然找不到对应参数，而且非基本类型，我们可以解析外层属性，将整个 JSON 作为参数进行解析。解析失败会抛出异常
+        result = objectMapper.readValue(requestBody, parameterType);
         // 必填参数的话，看解析出来的参数是否对应，非必填直接返回吧
         if (multiRequestBody.required()) {
             Field[] declaredFields = parameterType.getDeclaredFields();

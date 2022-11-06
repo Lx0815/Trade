@@ -1,5 +1,12 @@
-package com.d.tradeserver.web.trade.controller;
+package com.d.tradeserver.web.manager.controller;
 
+import com.d.tradeserver.common.constant.Constants;
+import com.d.tradeserver.common.utils.MyPair;
+import com.d.tradeserver.common.utils.ResponseUtils;
+import com.d.tradeserver.service.manager.SchoolService;
+import com.d.tradeserver.web.common.response.ResponseCode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,11 +18,25 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 
-
 @RestController
-@RequestMapping("/school")
+@RequestMapping("/manager")
 public class SchoolController {
 
-    public Object
+    private SchoolService schoolService;
+
+    @Autowired
+    public void setSchoolService(SchoolService schoolService) {
+        this.schoolService = schoolService;
+    }
+
+    @RequestMapping("/schools/{keyword}")
+    public Object fetchSchoolsByKeyWord(@PathVariable String keyword) {
+        MyPair<Boolean, Object> result = schoolService.queryByKeyword(keyword);
+        if (result.getKey()) {
+            return ResponseUtils.createResponse(ResponseCode.SUCCESS, result.getValue(), Constants.SELECT_SUCCESS);
+        } else {
+            return ResponseUtils.createResponse(ResponseCode.NO_DATA, Constants.NO_DATA);
+        }
+    }
 
 }

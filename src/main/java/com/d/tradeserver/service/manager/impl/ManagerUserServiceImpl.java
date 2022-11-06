@@ -1,16 +1,15 @@
-package com.d.tradeserver.manager.service.impl;
+package com.d.tradeserver.service.manager.impl;
 
-import com.d.tradeserver.common.pool.impl.MyPairPool;
+import com.d.tradeserver.common.constant.Constants;
 import com.d.tradeserver.common.utils.MyPair;
-import com.d.tradeserver.manager.mapper.ManageUserMapper;
-import com.d.tradeserver.manager.pojo.ManageUser;
-import com.d.tradeserver.manager.service.ManagerUserService;
-
+import com.d.tradeserver.common.utils.MyPairUtils;
+import com.d.tradeserver.mapper.manager.ManageUserMapper;
+import com.d.tradeserver.pojo.ManageUser;
+import com.d.tradeserver.service.manager.ManagerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-
-import java.time.LocalDateTime;
 
 /**
  * @author: Ding
@@ -21,39 +20,23 @@ import java.time.LocalDateTime;
 
 
 @Service
-public class ManagerUserServiceImpl implements ManagerUserService  {
+@Transactional
+public class ManagerUserServiceImpl implements ManagerUserService {
 
     private ManageUserMapper manageUserMapper;
+
     @Autowired
     public void setManageUserMapper(ManageUserMapper manageUserMapper) {
         this.manageUserMapper = manageUserMapper;
-    }
-
-    private MyPairPool<Boolean, Object> pairPool;
-    @Autowired
-    public void setPairPool(MyPairPool<Boolean, Object> pairPool) {
-        this.pairPool = pairPool;
-    }
-
-    @Override
-    public MyPair<Boolean, Object> register(ManageUser manageUser) throws Exception {
-        if (ObjectUtils.isEmpty(manageUser.getSessionAge())) manageUser.setSessionAge(30);
-        manageUser.setCreateDateTime(LocalDateTime.now());
-        manageUser.setUpdateDateTime(LocalDateTime.now());
-        if (ObjectUtils.nullSafeEquals(manageUserMapper.insertOne(manageUser), 1)) {
-            return pairPool.borrowObject().setKeyValue(Boolean.TRUE, manageUser);
-        } else {
-            return pairPool.borrowObject().setKeyValue(Boolean.FALSE, "注册失败");
-        }
     }
 
     @Override
     public MyPair<Boolean, Object> login(ManageUser manageUser) throws Exception {
         ManageUser user = manageUserMapper.selectByPropertyEquals(manageUser);
         if (ObjectUtils.isEmpty(user)) {
-            return pairPool.borrowObject().setKeyValue(Boolean.FALSE, "登录失败");
+            return MyPairUtils.createMyPair(Boolean.FALSE, "账号或密码错误");
         } else {
-            return pairPool.borrowObject().setKeyValue(Boolean.TRUE, user);
+            return MyPairUtils.createMyPair(Boolean.TRUE, user);
         }
     }
 
@@ -62,9 +45,9 @@ public class ManagerUserServiceImpl implements ManagerUserService  {
         ManageUser user = new ManageUser();
         user.setUsername(username);
         if (ObjectUtils.nullSafeEquals(1, manageUserMapper.selectCountByPropertyEquals(user))) {
-            return pairPool.borrowObject().setKey(Boolean.TRUE);
+            return MyPairUtils.createMyPair(Boolean.TRUE, null);
         } else {
-            return pairPool.borrowObject().setKey(Boolean.FALSE);
+            return MyPairUtils.createMyPair(Boolean.FALSE, Constants.DATA_EXISTED);
         }
     }
 }

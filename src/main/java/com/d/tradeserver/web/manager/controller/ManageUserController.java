@@ -1,14 +1,21 @@
-package com.d.tradeserver.manager.web.controller;
+package com.d.tradeserver.web.manager.controller;
 
-import com.d.tradeserver.common.pool.impl.ResponseObjectPool;
+import com.d.tradeserver.common.constant.Constants;
 import com.d.tradeserver.common.utils.MyPair;
-import com.d.tradeserver.manager.pojo.ManageUser;
-import com.d.tradeserver.manager.service.ManagerUserService;
-import com.d.tradeserver.manager.web.dto.ManageUserDTO;
+import com.d.tradeserver.common.utils.ResponseUtils;
+import com.d.tradeserver.pojo.ManageUser;
+import com.d.tradeserver.service.manager.ManagerUserService;
+import com.d.tradeserver.web.common.annotation.MultiRequestBody;
+import com.d.tradeserver.web.common.response.ResponseCode;
+import com.d.tradeserver.web.manager.dto.ManageUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import static com.d.tradeserver.common.web.response.ResponseCode.*;
+import javax.servlet.http.HttpSession;
+
+import static com.d.tradeserver.web.common.response.ResponseCode.FAIL;
+import static com.d.tradeserver.web.common.response.ResponseCode.SUCCESS;
 
 /**
  * @author: Ding
@@ -18,17 +25,11 @@ import static com.d.tradeserver.common.web.response.ResponseCode.*;
  */
 
 @RestController
-@RequestMapping("/manager/user")
+@RequestMapping("/manager/manageruser")
 public class ManageUserController {
 
-
-    private ResponseObjectPool responseObjectPool;
-    @Autowired
-    public void setResponseObjectPool(ResponseObjectPool responseObjectPool) {
-        this.responseObjectPool = responseObjectPool;
-    }
-
     private ManagerUserService managerUserService;
+
     @Autowired
     public void setManagerUserService(ManagerUserService managerUserService) {
         this.managerUserService = managerUserService;
@@ -37,48 +38,27 @@ public class ManageUserController {
     @GetMapping("/check/username/{username}")
     public Object checkUsername(@PathVariable("username") String username) {
         MyPair<Boolean, Object> result = managerUserService.checkUsernameIsExist(username);
-        if (result.getKey()) {
-            return responseObjectPool.borrowObject()
-                    .setCode(SUCCESS)
-                    .setMessage("用户名已存在");
-        } else {
-            return responseObjectPool.borrowObject()
-                    .setCode(FAIL)
-                    .setMessage("用户名可正常使用");
-        }
-    }
-
-    @PostMapping("/register")
-    public Object register(@RequestBody ManageUser manageUser) throws Exception {
-        MyPair<Boolean, Object> result = managerUserService.register(manageUser);
-        if (result.getKey()) {
-            ManageUserDTO userDTO = new ManageUserDTO((ManageUser) result.getValue());
-
-            return responseObjectPool.borrowObject()
-                    .setCode(SUCCESS)
-                    .setMessage("注册成功")
-                    .setDto(userDTO);
-        }
-
-        else {
-            return responseObjectPool.borrowObject().setCode(FAIL)
-                    .setMessage(result.getValue().toString());
-        }
+        return ResponseUtils.createResponse(SUCCESS, ResponseCode.USERNAME_EXIST.getDescription());
     }
 
     @PostMapping("/login")
-    public Object login(@RequestBody ManageUser user) throws Exception {
+    public Object login(@MultiRequestBody ManageUser user,
+                        @MultiRequestBody String captcha,
+                        HttpSession session) throws Exception {
+
+        Object captchaObj = session.getAttribute(Constants.SESSION_KEY_CAPTCHA_LOGIN);
+        if (!ObjectUtils.nullSafeEquals(captchaObj, captcha)) {
+            return ResponseUtils.createResponse(FAIL, ResponseCode.CAPTCHA_ERROR.getDescription());
+        }
         MyPair<Boolean, Object> result = managerUserService.login(user);
 
-        if (result.getKey()) {
-            return responseObjectPool.borrowObject()
-                    .setCode(SUCCESS)
-                    .setDto(new ManageUserDTO((ManageUser) result.getValue()))
-                    .setMessage("登录成功");
-        } else {
-            return responseObjectPool.borrowObject()
-                    .setCode(FAIL)
-                    .setMessage("登录失败");
-        }
+        session.setAttribute(Constants.SESSION_KEY_CURRENT_USER, result.getValue());
+        return ResponseUtils.createResponse(SUCCESS, new ManageUserDTO((ManageUser) result.getValue()), SUCCESS.getDescription());
+    }
+
+    @DeleteMapping("/exit")
+    public Object exit(HttpSession session) {
+        session.removeAttribute(Constants.SESSION_KEY_CURRENT_USER);
+        return ResponseUtils.createResponse(SUCCESS, Constants.EMPTY_ARRAY, Constants.EXIT_SUCCESS);
     }
 }

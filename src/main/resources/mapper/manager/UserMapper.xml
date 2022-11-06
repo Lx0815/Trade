@@ -52,7 +52,7 @@
                 nick_name = #{nickName} ,
             </if>
             <if test="gender != null and gender != ''">
-                gender - #{gender} ,
+                gender = #{gender} ,
             </if>
             <if test="score != null">
                 score = #{score} ,
@@ -87,5 +87,29 @@
         SELECT <include refid="allColumns"/>
         FROM trade_server_db.user
         WHERE pk_id = #{id}
+    </select>
+    <select id="selectCountById" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM trade_server_db.user
+        WHERE pk_id = #{id}
+    </select>
+    <select id="selectByMap" resultMap="map">
+        SELECT <include refid="allColumns"/>
+        FROM trade_server_db.user
+        <where>
+                AND is_delete = 0
+            <if test="nickName != null and nickName != ''">
+                AND nick_name = CONCAT('%', #{nickName}, '%')
+            </if>
+            <if test="gender != null and gender != ''">
+                AND gender = CONCAT('%', #{gender}, '%')
+            </if>
+            <if test="minScore != null and minScore >= 0">
+                AND score >= #{minScore}
+            </if>
+            <if test="maxScore != null and 100 >= maxScore">
+                AND #{maxScore} >= score
+            </if>
+        </where>
     </select>
 </mapper>

@@ -1,4 +1,6 @@
-package com.d.tradeserver.service.trade;
+package com.d.tradeserver.service.manager;
+
+import com.d.tradeserver.common.utils.MyPair;
 
 /**
  * @author: Ding
@@ -9,4 +11,7 @@ package com.d.tradeserver.service.trade;
 
 
 public interface SchoolService {
+
+    MyPair<Boolean, Object> queryByKeyword(String keyword);
+
 }

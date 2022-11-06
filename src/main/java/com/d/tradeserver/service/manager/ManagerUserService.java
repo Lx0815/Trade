@@ -1,7 +1,7 @@
-package com.d.tradeserver.manager.service;
+package com.d.tradeserver.service.manager;
 
 import com.d.tradeserver.common.utils.MyPair;
-import com.d.tradeserver.manager.pojo.ManageUser;
+import com.d.tradeserver.pojo.ManageUser;
 
 /**
  * @author: Ding
@@ -12,8 +12,6 @@ import com.d.tradeserver.manager.pojo.ManageUser;
 
 
 public interface ManagerUserService {
-
-    MyPair<Boolean, Object> register(ManageUser manageUser) throws Exception;
 
     MyPair<Boolean, Object> login(ManageUser manageUser) throws Exception;
 

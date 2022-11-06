@@ -1,13 +1,18 @@
-package com.d.tradeserver.web.trade.controller;
+package com.d.tradeserver.web.manager.controller;
 
-import com.d.tradeserver.common.utils.MyPair;
+import com.d.tradeserver.common.constant.Constants;
 import com.d.tradeserver.common.utils.ResponseUtils;
-import com.d.tradeserver.service.trade.UserService;
+import com.d.tradeserver.pojo.User;
+import com.d.tradeserver.pojo.UserDetail;
+import com.d.tradeserver.service.manager.UserService;
+import com.d.tradeserver.web.common.annotation.MultiRequestBody;
+import com.d.tradeserver.web.common.annotation.RequestParamObject;
+import com.d.tradeserver.web.manager.dto.UserFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static com.d.tradeserver.web.common.response.ResponseCode.FAIL;
+import java.util.List;
+
 import static com.d.tradeserver.web.common.response.ResponseCode.SUCCESS;
 
 /**
@@ -18,7 +23,7 @@ import static com.d.tradeserver.web.common.response.ResponseCode.SUCCESS;
  */
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/manager")
 public class UserController {
 
     private UserService userService;
@@ -28,14 +33,50 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping("")
+    @GetMapping("/users")
     public Object fetchAllUser() {
-        MyPair<Boolean, Object> result = userService.queryAllUser();
-        if (result.getKey()) {
-            return ResponseUtils.createResponse(SUCCESS, result.getValue(), null);
-        } else {
-            return ResponseUtils.createResponse(FAIL, null, result.getValue().toString());
-        }
+        List<User> userList = userService.queryAllUser();
+        return ResponseUtils.createResponse(SUCCESS, userList, Constants.SELECT_SUCCESS);
     }
 
+    @GetMapping("/user/detail/{userId}")
+    public Object fetchDetailByUserId(@PathVariable Integer userId) {
+        UserDetail userDetail = userService.queryDetailByUserId(userId);
+        return ResponseUtils.createResponse(SUCCESS, userDetail, Constants.SELECT_SUCCESS);
+    }
+
+    @GetMapping("/users/filter")
+    public Object fetchUserByUserFilter(@RequestParamObject UserFilter userFilter) {
+        List<User> userList = userService.queryUserByUserFilter(userFilter);
+        return ResponseUtils.createResponse(SUCCESS, userList, Constants.SELECT_SUCCESS);
+    }
+
+    @PostMapping("/user")
+    public Object addNewUser(@MultiRequestBody User user,
+                             @MultiRequestBody UserDetail userDetail) {
+
+        userService.addNewUserAndUserDetail(user, userDetail);
+        return ResponseUtils.createResponse(SUCCESS, Constants.CREATE_SUCCESS);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public Object deleteUser(@PathVariable Integer id) {
+
+        userService.removeUserById(id);
+        return ResponseUtils.createResponse(SUCCESS, Constants.DELETE_SUCCESS);
+    }
+
+
+    @DeleteMapping("/users")
+    public Object deleteUsers(@MultiRequestBody Integer[] ids) {
+
+        userService.removeUserByIds(ids);
+        return ResponseUtils.createResponse(SUCCESS, Constants.DELETE_SUCCESS);
+    }
+
+    @PatchMapping("/user")
+    public Object editUser(@RequestBody User user) {
+        userService.updateUserById(user);
+        return ResponseUtils.createResponse(SUCCESS, Constants.UPDATE_SUCCESS);
+    }
 }

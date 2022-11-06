@@ -1,1 +1,24 @@
+spring:
+  banner:
+    location: static/spring-init-image.txt
+  datasource:
+    # JDBC 连接信息
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:1103/trade_server_db?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    # 数据源信息
+    type: com.alibaba.druid.pool.DruidDataSource
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  thymeleaf:
+    enabled: false
+    check-template-location: false
 
+mybatis:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  type-aliases-package: com.d.tradeserver.pojo
+
+logging:
+  level:
+    com.d.tradeserver.mapper: DEBUG

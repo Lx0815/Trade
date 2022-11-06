@@ -1,8 +1,7 @@
 package com.d.tradeserver.mapper.common.exception;
 
 import com.d.tradeserver.common.exception.AbstractException;
-import com.d.tradeserver.common.exception.BaseException;
-import com.d.tradeserver.common.exception.ExceptionCode;
+import com.d.tradeserver.web.common.response.ResponseCode;
 
 /**
  * @author: Ding
@@ -12,12 +11,13 @@ import com.d.tradeserver.common.exception.ExceptionCode;
  */
 
 
-public class DAOException extends AbstractException {
+public class MapperException extends AbstractException {
 
-    public DAOException(ExceptionCode exceptionCode, Throwable cause) {
-        this(exceptionCode, cause.getMessage(), cause);
+    public MapperException(ResponseCode code, Throwable cause) {
+        this(code, cause.getMessage(), cause);
     }
-    public DAOException(ExceptionCode exceptionCode, String message, Throwable cause) {
-        super(exceptionCode, message, cause);
+
+    public MapperException(ResponseCode code, String message, Throwable cause) {
+        super(code, message, cause);
     }
 }

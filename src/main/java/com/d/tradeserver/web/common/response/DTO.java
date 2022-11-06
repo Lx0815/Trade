@@ -1,4 +1,4 @@
-package com.d.tradeserver.common.web.response;
+package com.d.tradeserver.web.common.response;
 
 /**
  * @author: Ding

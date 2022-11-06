@@ -12,7 +12,7 @@
         <result property="updateDateTime" column="update_time"
                 javaType="java.time.LocalDateTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
         <association property="school" javaType="school"
-                     column="school_id" select="com.d.tradeserver.mapper.trade.SchoolMapper.selectById" />
+                     column="school_id" select="com.d.tradeserver.mapper.manager.SchoolMapper.selectById" />
     </resultMap>
 
     <sql id="noIdColumns">

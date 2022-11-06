@@ -1,4 +1,4 @@
-package com.d.tradeserver.common.pool;
+package com.d.tradeserver.common.objectpool;
 
 /**
  * @author: Ding

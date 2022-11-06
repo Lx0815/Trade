@@ -11,8 +11,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 public enum ExceptionCode {
-;
-
+    ;
 
 
     private final Integer code;

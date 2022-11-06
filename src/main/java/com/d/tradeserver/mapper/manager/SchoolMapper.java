@@ -1,8 +1,10 @@
-package com.d.tradeserver.mapper.trade;
+package com.d.tradeserver.mapper.manager;
 
-import com.d.tradeserver.pojo.trade.School;
+import com.d.tradeserver.pojo.School;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author: Ding
@@ -15,5 +17,10 @@ import org.springframework.stereotype.Repository;
 public interface SchoolMapper {
 
     School selectById(@Param("id") Integer id);
+
+
+    List<School> selectByKeyword(@Param("keywordLike") String keywordLike);
+
+    List<Integer> selectIdsByName(@Param("nameLike") String nameLike);
 
 }

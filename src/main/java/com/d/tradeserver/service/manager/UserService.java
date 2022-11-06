@@ -1,6 +1,10 @@
-package com.d.tradeserver.service.trade;
+package com.d.tradeserver.service.manager;
 
-import com.d.tradeserver.common.utils.MyPair;
+import com.d.tradeserver.pojo.User;
+import com.d.tradeserver.pojo.UserDetail;
+import com.d.tradeserver.web.manager.dto.UserFilter;
+
+import java.util.List;
 
 /**
  * @author: Ding
@@ -12,6 +16,17 @@ import com.d.tradeserver.common.utils.MyPair;
 
 public interface UserService {
 
-    MyPair<Boolean, Object> queryAllUser();
+    List<User> queryAllUser();
 
+    UserDetail queryDetailByUserId(Integer id);
+
+    Boolean addNewUserAndUserDetail(User user, UserDetail userDetail);
+
+    Boolean removeUserById(Integer id);
+
+    Boolean removeUserByIds(Integer[] ids);
+
+    Boolean updateUserById(User user);
+
+    List<User> queryUserByUserFilter(UserFilter userFilter);
 }

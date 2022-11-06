@@ -1,7 +1,8 @@
-package com.d.tradeserver.manager.web.dto;
+package com.d.tradeserver.web.manager.dto;
 
-import com.d.tradeserver.common.web.response.DTO;
-import com.d.tradeserver.manager.pojo.ManageUser;
+import com.d.tradeserver.pojo.ManageUser;
+import com.d.tradeserver.pojo.School;
+import com.d.tradeserver.web.common.response.DTO;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ public class ManageUserDTO implements DTO {
 
     private String username;
 
-    private Integer schoolId;
+    private School school;
 
     private Integer sessionAge;
 
@@ -31,7 +32,7 @@ public class ManageUserDTO implements DTO {
         this.id = user.getId();
         this.username = user.getUsername();
         this.sessionAge = user.getSessionAge();
-        this.schoolId = user.getSchoolId();
+        this.school = user.getSchool();
         this.updateDateTime = user.getUpdateDateTime();
         this.createDateTime = user.getCreateDateTime();
     }
@@ -52,12 +53,12 @@ public class ManageUserDTO implements DTO {
         this.username = username;
     }
 
-    public Integer getSchoolId() {
-        return schoolId;
+    public School getSchool() {
+        return school;
     }
 
-    public void setSchoolId(Integer schoolId) {
-        this.schoolId = schoolId;
+    public void setSchool(School school) {
+        this.school = school;
     }
 
     public Integer getSessionAge() {

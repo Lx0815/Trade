@@ -1,4 +1,4 @@
-package com.d.tradeserver.pojo.trade;
+package com.d.tradeserver.pojo;
 
 import java.time.LocalDateTime;
 
@@ -52,4 +52,6 @@ public class Major {
     public void setUpdateDateTime(LocalDateTime updateDateTime) {
         this.updateDateTime = updateDateTime;
     }
+
+
 }

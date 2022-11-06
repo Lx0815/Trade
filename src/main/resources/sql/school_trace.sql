@@ -1,3 +1,9 @@
+DROP DATABASE IF EXISTS trade_server_db;
+
+CREATE DATABASE trade_server_db;
+
+USE trade_server_db;
+
 DROP TABLE IF EXISTS `goods`;
 DROP TABLE IF EXISTS `goods_images`;
 DROP TABLE IF EXISTS `goods_remark`;
@@ -30,8 +36,8 @@ CREATE TABLE `goods`  (
                           `transaction_addr` int NOT NULL COMMENT '指向 transaction_address.pk_id',
                           `status` int NOT NULL COMMENT '指向 trade_status.pk_id',
                           `sell_time` datetime NULL DEFAULT NULL COMMENT '售出时间',
-                          `count` int NOT NULL DEFAULT 1 COMMENT '商品库存',
-                          `type` int NOT NULL DEFAULT '' COMMENT '商品类别，goods_type.pk_id',
+                          `count` int DEFAULT 1 COMMENT '商品库存',
+                          `type` int NOT NULL COMMENT '商品类别，goods_type.pk_id',
                           `create_time` datetime NOT NULL COMMENT '创建时间',
                           `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '上次修改时间',
                           PRIMARY KEY (`pk_id`)
@@ -219,9 +225,9 @@ CREATE TABLE `user_detail`  (
                                 `status` int NULL DEFAULT 0 COMMENT '账号状态。0 表示正常，1表示已封禁',
                                 `email` varchar(32) NOT NULL COMMENT '邮箱',
                                 `school_id` int NOT NULL COMMENT '学校id',
-                                `grade` year NOT NULL DEFAULT '' COMMENT '所在年级，单位为 级',
-                                `major_name` int NOT NULL DEFAULT '' COMMENT '专业名称，指向major.id',
-                                `class_num` varchar(16) NOT NULL DEFAULT 00 COMMENT '班级序号',
+                                `grade` year NOT NULL COMMENT '所在年级，单位为 级',
+                                `major_name` int NOT NULL COMMENT '专业名称，指向major.id',
+                                `class_num` varchar(16) NOT NULL COMMENT '班级序号',
                                 `create_time` datetime(0) NOT NULL COMMENT '账号创建时间',
                                 `update_time` datetime(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '上次修改时间',
                                 PRIMARY KEY (`pk_id`),

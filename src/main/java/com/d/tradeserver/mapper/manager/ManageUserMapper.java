@@ -1,6 +1,6 @@
-package com.d.tradeserver.manager.mapper;
+package com.d.tradeserver.mapper.manager;
 
-import com.d.tradeserver.manager.pojo.ManageUser;
+import com.d.tradeserver.pojo.ManageUser;
 import org.springframework.stereotype.Repository;
 
 /**

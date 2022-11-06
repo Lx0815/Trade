@@ -1,6 +1,4 @@
-package com.d.tradeserver.pojo.manager;
-
-import com.d.tradeserver.pojo.trade.School;
+package com.d.tradeserver.pojo;
 
 import java.time.LocalDateTime;
 

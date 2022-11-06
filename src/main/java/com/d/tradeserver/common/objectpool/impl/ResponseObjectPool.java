@@ -1,10 +1,9 @@
-package com.d.tradeserver.common.pool.impl;
+package com.d.tradeserver.common.objectpool.impl;
 
-import com.d.tradeserver.common.pool.AbstractPool;
-import com.d.tradeserver.common.pool.factory.ResponseObjectPooledObjectFactory;
-import com.d.tradeserver.common.web.response.ResponseObject;
+import com.d.tradeserver.common.objectpool.AbstractPool;
+import com.d.tradeserver.common.objectpool.factory.ResponseObjectPooledObjectFactory;
+import com.d.tradeserver.web.common.response.ResponseObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.springframework.stereotype.Component;
 
 /**
  * @author: Ding
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @modify:
  */
 
-@Component
 public class ResponseObjectPool extends AbstractPool<ResponseObject> {
 
     public ResponseObjectPool() {

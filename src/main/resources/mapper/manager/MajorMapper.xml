@@ -4,23 +4,28 @@
 
     <resultMap id="map" type="major">
         <id property="id" column="pk_id"/>
-        <result property="name" column="name"/>
+        <result property="name" column="uk_name"/>
         <result property="createDateTime" column="create_time"/>
         <result property="updateDateTime" column="update_time"/>
     </resultMap>
 
     <sql id="allColumns">
-        pk_id, name, create_time, update_time
+        pk_id, uk_name, create_time, update_time
     </sql>
 
     <select id="selectById" resultMap="map">
-        SELECT pk_id, name, create_time, update_time
+        SELECT <include refid="allColumns"/>
         FROM trade_server_db.major
         WHERE pk_id = #{id}
     </select>
     <select id="selectByKeyword" resultMap="map">
         SELECT <include refid="allColumns"/>
         FROM trade_server_db.major
-        WHERE `name` like CONCAT('%', #{keyword}, '%')
+        WHERE `uk_name` LIKE CONCAT('%', #{keywordLike}, '%')
+    </select>
+    <select id="selectIdsByName" resultType="java.lang.Integer">
+        SELECT pk_id
+        FROM trade_server_db.major
+        WHERE uk_name LIKE CONCAT('%', #{nameLike}, '%')
     </select>
 </mapper>

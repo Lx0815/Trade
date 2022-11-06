@@ -1,10 +1,9 @@
-package com.d.tradeserver.common.pool.impl;
+package com.d.tradeserver.common.objectpool.impl;
 
-import com.d.tradeserver.common.pool.AbstractPool;
-import com.d.tradeserver.common.pool.factory.PairPooledObjectFactory;
+import com.d.tradeserver.common.objectpool.AbstractPool;
+import com.d.tradeserver.common.objectpool.factory.PairPooledObjectFactory;
 import com.d.tradeserver.common.utils.MyPair;
 import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.springframework.stereotype.Component;
 
 /**
  * @author: Ding
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @modify:
  */
 
-@Component
 public class MyPairPool<T, U> extends AbstractPool<MyPair<T, U>> {
 
     public MyPairPool() {
@@ -21,6 +19,11 @@ public class MyPairPool<T, U> extends AbstractPool<MyPair<T, U>> {
     }
 
     public MyPairPool(GenericObjectPool<MyPair<T, U>> pairPool) {
-        super(pairPool);;
+        super(pairPool);
+    }
+
+    @Override
+    public MyPair<T, U> borrowObject() {
+        return super.borrowObject();
     }
 }

@@ -54,20 +54,26 @@
             <if test="password != null and password != ''">
                 `password` = #{password} ,
             </if>
-            <if test="readName != null and realName != ''">
+            <if test="realName != null and realName != ''">
                 real_name = #{realName} ,
             </if>
-            <if test="user_id != null">
+            <if test="user != null and user > 0">
                 user_id = #{user.id} ,
             </if>
-            <if test="status != null">
+            <if test="status != null and status > 0">
                 `status` = #{status} ,
             </if>
             <if test="email != null and email != ''">
                 email = #{email} ,
             </if>
+            <if test="school != null and school.id > 0">
+                school = #{school.id} ,
+            </if>
             <if test="grade != null">
                 grade = #{grade} ,
+            </if>
+            <if test="major != null and major.id > 0">
+                major = #{major.id} ,
             </if>
             <if test="classNum != null and classNum != ''">
                 class_num = #{classNum} ,
@@ -90,5 +96,47 @@
         FROM trade_server_db.user_detail
         WHERE user_id = #{userId}
             AND is_delete = 0
+    </select>
+    <select id="selectCountById" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM trade_server_db.user_detail
+        WHERE pk_id = #{id}
+    </select>
+    <select id="selectUserIdsByMap" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT user_id
+        FROM trade_server_db.user_detail
+        <where>
+                is_delete = 0
+            <if test="schoolCardIdLike != null and schoolCardIdLike != ''">
+                AND `school_card_id` LIKE CONCAT('%', #{schoolCardIdLike}, '%')
+            </if>
+            <if test="realNameLike != null and realNameLike != ''">
+                AND real_name LIKE CONCAT('%', #{realNameLike}, '%')
+            </if>
+            <if test="status != null and status >= 0">
+                AND `status` = #{status}
+            </if>
+            <if test="emailLike != null and emailLike != ''">
+                AND email LIKE CONCAT('%', #{emailLike}, '%')
+            </if>
+            <if test="schoolIdList != null and schoolIdList.size > 0">
+                AND school_id IN
+                <foreach collection="schoolIdList" item="school" open="(" separator="," close=")">
+                    #{school.id}
+                </foreach>
+            </if>
+            <if test="grade != null and grade > 0">
+                AND grade = #{grade}
+            </if>
+            <if test="majorIdList != null and majorIdList.size > 0">
+                AND major_id IN
+                <foreach collection="majorIdList" item="major" open="(" separator="," close=")">
+                    #{major.id}
+                </foreach>
+            </if>
+            <if test="classNum != null and classNum != ''">
+                AND class_num = #{classNum}
+            </if>
+        </where>
     </select>
 </mapper>

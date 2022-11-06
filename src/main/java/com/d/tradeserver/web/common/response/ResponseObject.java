@@ -1,4 +1,4 @@
-package com.d.tradeserver.common.web.response;
+package com.d.tradeserver.web.common.response;
 
 /**
  * @author: Ding
@@ -12,16 +12,16 @@ public class ResponseObject {
 
     private ResponseCode code;
 
-    private DTO dto;
+    private Object data;
 
     private String message;
 
     public ResponseObject() {
     }
 
-    public ResponseObject(ResponseCode code, DTO dto, String message) {
+    public ResponseObject(ResponseCode code, Object data, String message) {
         this.code = code;
-        this.dto = dto;
+        this.data = data;
         this.message = message;
     }
 
@@ -34,12 +34,12 @@ public class ResponseObject {
         return this;
     }
 
-    public DTO getDto() {
-        return dto;
+    public Object getData() {
+        return data;
     }
 
-    public ResponseObject setDto(DTO dto) {
-        this.dto = dto;
+    public ResponseObject setData(Object data) {
+        this.data = data;
         return this;
     }
 

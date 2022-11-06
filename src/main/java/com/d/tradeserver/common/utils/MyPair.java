@@ -1,4 +1,4 @@
-package com.d.tradeserver.commond.utils;
+package com.d.tradeserver.common.utils;
 
 import org.springframework.util.ObjectUtils;
 
@@ -36,7 +36,6 @@ public class MyPair<T, U> {
     }
 
     /**
-     *
      * @return 获取键
      */
     public T getKey() {
@@ -44,15 +43,8 @@ public class MyPair<T, U> {
     }
 
     /**
-     *
-     * @return 获取值
-     */
-    public U getValue() {
-        return value;
-    }
-
-    /**
      * 设置键。注意：此键不能为 null
+     *
      * @param key 键
      */
     public MyPair<T, U> setKey(T key) {
@@ -64,7 +56,15 @@ public class MyPair<T, U> {
     }
 
     /**
+     * @return 获取值
+     */
+    public U getValue() {
+        return value;
+    }
+
+    /**
      * 设置值。值可以为 null
+     *
      * @param value 值
      */
     public MyPair<T, U> setValue(U value) {
