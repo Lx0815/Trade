@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.d.tradeserver.mapper.manager.ManageUserMapper">
+
+    <resultMap id="map" type="manageUser">
+        <id property="id" column="pk_id"/>
+        <result property="username" column="uk_username"/>
+        <result property="password" column="password"/>
+        <result property="sessionAge" column="session_age"/>
+        <result property="createDateTime" column="create_time"
+                javaType="java.time.LocalDateTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <result property="updateDateTime" column="update_time"
+                javaType="java.time.LocalDateTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+        <association property="school" javaType="school"
+                     column="school_id" select="com.d.tradeserver.mapper.trade.SchoolMapper.selectById" />
+    </resultMap>
+
+    <sql id="noIdColumns">
+        `uk_username`, `password`, `school_id`, `session_age`, `create_time`, `update_time`
+    </sql>
+
+    <sql id="allColumn">
+        pk_id, <include refid="noIdColumns"/>
+    </sql>
+
+    <sql id="whereAllPropertyNonNull">
+        <where>
+            <if test="id != null">
+                and `pk_id` = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and `uk_username` = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and `password` = #{password}
+            </if>
+            <if test="school != null">
+                and `school_id` = #{school.id}
+            </if>
+            <if test="sessionAge != null">
+                and `session_age` = #{sessionAge}
+            </if>
+            <if test="createDateTime != null">
+                and `create_time` = #{createDateTime}
+            </if>
+            <if test="updateDateTime != null">
+                `updateDateTime` = #{updateDateTime}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insertOne" parameterType="manageUser" keyProperty="id" useGeneratedKeys="true" >
+        INSERT INTO trade_server_db.manage_user ( <include refid="noIdColumns"/> )
+        VALUES (#{username}, #{password}, #{school.id}, #{sessionAge},
+                #{createDateTime,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler},
+                #{updateDateTime,typeHandler=org.apache.ibatis.type.LocalDateTimeTypeHandler})
+    </insert>
+
+
+    <select id="selectByPropertyEquals" resultMap="map">
+        SELECT <include refid="allColumn"/>
+        FROM trade_server_db.manage_user
+        <include refid="whereAllPropertyNonNull"/>
+    </select>
+    <select id="selectCountByPropertyEquals" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM trade_server_db.manage_user
+        <include refid="whereAllPropertyNonNull"/>
+    </select>
+</mapper>

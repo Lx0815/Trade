@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.d.tradeserver.mapper.manager.UserDetailMapper">
+
+
+    <resultMap id="map" type="userDetail">
+        <id property="id" column="pk_id"/>
+        <result property="schoolCardId" column="school_card_id"/>
+        <result property="password" column="password"/>
+        <result property="realName" column="real_name"/>
+        <result property="status" column="status"/>
+        <result property="email" column="email"/>
+        <result property="grade" column="grade"/>
+        <result property="classNum" column="class_num"/>
+        <result property="createDateTime" column="create_time"/>
+        <result property="updateDateTime" column="update_time"/>
+
+        <association property="major" column="{id=major_id}"
+                     select="com.d.tradeserver.mapper.manager.MajorMapper.selectById"/>
+        <association property="school" column="{id=school_id}"
+                     select="com.d.tradeserver.mapper.manager.SchoolMapper.selectById"/>
+    </resultMap>
+
+    <sql id="noIdColumns">
+        school_card_id, password, real_name, status, email, school_id, grade, major_id, class_num, create_time, update_time
+    </sql>
+
+    <sql id="allColumns">
+        pk_id, <include refid="noIdColumns"/>
+    </sql>
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO trade_server_db.user_detail (school_card_id, `password`, real_name, user_id, `status`, email, school_id, grade, major_id, class_num, create_time, update_time)
+        VALUES (#{schoolCardId}, #{password}, #{realName}, #{user.id}, #{status}, #{email}, #{school.id}, #{grade}, #{major.id}, #{classNum}, #{createDateTime}, #{updateDateTime})
+    </insert>
+    <update id="notRealDeleteById">
+        UPDATE trade_server_db.user_detail
+        SET is_delete = 1
+        WHERE pk_id = #{id}
+    </update>
+    <update id="notRealDeleteByIds">
+        UPDATE trade_server_db.user_detail
+        SET is_delete = 1
+        WHERE pk_id IN
+        <foreach collection="ids" item="id" open=" (" separator=", " close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateById">
+        UPDATE trade_server_db.user_detail
+        <set>
+            <if test="schoolCardId != null and schoolCardId != ''">
+                school_card_id = #{schoolCardId} ,
+            </if>
+            <if test="password != null and password != ''">
+                `password` = #{password} ,
+            </if>
+            <if test="readName != null and realName != ''">
+                real_name = #{realName} ,
+            </if>
+            <if test="user_id != null">
+                user_id = #{user.id} ,
+            </if>
+            <if test="status != null">
+                `status` = #{status} ,
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email} ,
+            </if>
+            <if test="grade != null">
+                grade = #{grade} ,
+            </if>
+            <if test="classNum != null and classNum != ''">
+                class_num = #{classNum} ,
+            </if>
+            <if test="updateDateTime != null">
+                update_time = #{updateDateTime} ,
+            </if>
+        </set>
+        WHERE pk_id = #{id}
+    </update>
+
+    <select id="selectById" resultMap="map">
+        SELECT <include refid="noIdColumns"/>
+        FROM trade_server_db.user_detail
+        WHERE pk_id = #{id}
+            AND is_delete = 0
+    </select>
+    <select id="selectByUserId" resultMap="map">
+        SELECT <include refid="allColumns"/>
+        FROM trade_server_db.user_detail
+        WHERE user_id = #{userId}
+            AND is_delete = 0
+    </select>
+</mapper>

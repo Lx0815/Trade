@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.d.tradeserver.mapper.manager.UserMapper">
+
+    <resultMap id="map" type="user">
+        <id property="id" column="pk_id"/>
+        <result property="headshot" column="headshot"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="gender" column="gender"/>
+        <result property="score" column="score"/>
+        <result property="createDateTime" column="create_time"/>
+        <result property="updateDateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="noIdColumns">
+        `headshot`, `nick_name`, `gender`, `score`, `create_time`, `update_time`, `user_detail_id`
+    </sql>
+
+    <sql id="allColumns">
+        `pk_id`, <include refid="noIdColumns"/>
+    </sql>
+
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO trade_server_db.user ( headshot, nick_name, gender, score, create_time, update_time)
+        VALUES (#{headshot}, #{nickName}, #{gender}, #{score}, #{createDateTime}, #{updateDateTime})
+    </insert>
+    <update id="updateUserDetailById">
+        UPDATE trade_server_db.user
+        SET user_detail_id = #{userDetailId}
+        WHERE pk_id = #{userId}
+    </update>
+    <update id="notRealDeleteById">
+        UPDATE trade_server_db.user
+        SET `is_delete` = 1
+        WHERE pk_id = #{id}
+    </update>
+    <update id="notRealDeleteByIds">
+        UPDATE trade_server_db.user
+        SET is_delete = 1
+        WHERE pk_id IN
+        <foreach collection="ids" item="id" open=" (" separator=", " close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateById">
+        UPDATE trade_server_db.user
+        <set>
+            <if test="headshot != null and headshot != ''">
+                headshot = #{headshot} ,
+            </if>
+            <if test="nickName != null and nickName != ''">
+                nick_name = #{nickName} ,
+            </if>
+            <if test="gender != null and gender != ''">
+                gender - #{gender} ,
+            </if>
+            <if test="score != null">
+                score = #{score} ,
+            </if>
+            <if test="updateDateTime != null">
+                update_time = #{updateDateTime}
+            </if>
+        </set>
+        WHERE pk_id = #{id}
+    </update>
+
+
+    <select id="selectAll" resultMap="map">
+        SELECT <include refid="allColumns"/>
+        FROM trade_server_db.user
+        WHERE is_delete = 0
+    </select>
+    <select id="selectUserDetailIdById" resultType="java.lang.Integer">
+        SELECT user_detail_id
+        FROM trade_server_db.user
+        WHERE pk_id = #{id}
+    </select>
+    <select id="selectUserDetailIdByIds" resultType="java.lang.Integer">
+        SELECT user_detail_id
+        FROM trade_server_db.user
+        WHERE pk_id IN
+        <foreach collection="ids" item="id" open=" (" separator=", " close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectById" resultMap="map">
+        SELECT <include refid="allColumns"/>
+        FROM trade_server_db.user
+        WHERE pk_id = #{id}
+    </select>
+</mapper>
